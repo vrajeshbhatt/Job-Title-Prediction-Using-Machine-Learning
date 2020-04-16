@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+
+<style>
+@charset "UTF-8";
+@import url("//fonts.googleapis.com/css?family=Raleway:400,800");
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css");
+.row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+.row:before {
+  content: "";
+  display: table;
+}
+
+*, *:after, *:before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+body {
+  background: #fff;
+  font-family: 'Raleway';
+  line-height: 1.55;
+  color: #737373;
+  font-weight: 400;
+}
+body a {
+  color: #27b198;
+  text-decoration: none;
+  border-bottom: 2px solid #fff;
+}
+body a:hover {
+  border-color: #eeeeee;
+}
+
+code {
+  background: #fff;
+  color: #999999;
+  padding: 2px 8px;
+}
+
+header {
+  position: relative;
+  text-align: center;
+  text-transform: uppercase;
+  color: #1f8f7b;
+  border-bottom: 1px solid dareken(#2dceb1, 15%);
+  letter-spacing: 4px;
+  padding: 12px 0;
+  background: #fafafa;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.wrap {
+  max-width: 48em;
+  margin: 0 auto;
+  padding: 2.5em 0 4em;
+}
+
+.row.last {
+  border-bottom: 1px solid #eeeeee;
+}
+
+section {
+  position: relative;
+  padding: 30px 20px;
+  width: 50%;
+  min-height: 12em;
+  float: left;
+  background: #fafafa;
+  border-top: 1px solid #eeeeee;
+  border-left: 1px solid #eeeeee;
+}
+section:nth-child(even) {
+  border-right: 1px solid #eeeeee;
+}
+section.item-incorrect {
+  background: #f6f6f6;
+}
+section.item-incorrect:before {
+  position: absolute;
+  z-index: 399;
+  bottom: 0;
+  right: 0;
+  content: "";
+  height: 0;
+  width: 0;
+  border: 35px solid;
+  border-color: transparent #ff5c61 #ff5c61 transparent;
+}
+section.item-incorrect:after {
+  line-height: 1.4;
+  position: absolute;
+  z-index: 499;
+  font-family: 'fontawesome';
+  content: "";
+  bottom: 0;
+  right: 7px;
+  font-size: 1.9em;
+  color: #ff383e;
+}
+section.item-correct:before {
+  position: absolute;
+  z-index: 399;
+  bottom: 0;
+  right: 0;
+  content: "";
+  height: 0;
+  width: 0;
+  border: 35px solid;
+  border-color: transparent #48d7bd #48d7bd transparent;
+}
+section.item-correct:after {
+  line-height: 1.4;
+  position: absolute;
+  z-index: 499;
+  font-family: 'fontawesome';
+  content: "";
+  bottom: 0;
+  right: 7px;
+  font-size: 1.9em;
+  color: #2dceb1;
+}
+
+input[type="radio"] {
+  position: absolute;
+  visibility: hidden;
+}
+input[type="radio"] + label {
+  background: #fff;
+  display: inline-block;
+  padding: 5px 15px;
+  margin: 5px 10px 5px 0;
+  border: 1px solid #eeeeee;
+  -webkit-transition: all 0.1s linear;
+  -moz-transition: all 0.1s linear;
+  transition: all 0.1s linear;
+}
+input[type="radio"] + label:before {
+  content: "\f10c";
+  font-family: 'fontawesome';
+  margin-right: 7px;
+  color: #2dceb1;
+}
+input[type="radio"] + label:hover {
+  cursor: pointer;
+}
+input[type="radio"]:checked + label {
+  background: #50d9c0;
+  color: #1f8f7b;
+}
+input[type="radio"]:checked + label:before {
+  content: "\f192";
+  color: #1f8f7b;
+}
+
+.question {
+  font-weight: bold;
+}
+
+.submit {
+  padding: 20px 5px;
+}
+.submit button {
+  background: #2dceb1;
+  color: #1f8f7b;
+  border: none;
+  display: block;
+  outline: none;
+  width: 300px;
+  margin: 1em auto 1.5em;
+  padding: .8em 1em;
+  background: #f8f8f8;
+  color: gainsboro;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  border: 1px solid #eeeeee;
+}
+
+#emc-score {
+  text-align: center;
+  opacity: 0;
+  padding: 0;
+  -webkit-transition: all 0.55s ease;
+  -moz-transition: all 0.55s ease;
+  transition: all 0.55s ease;
+}
+#emc-score.new-score {
+  opacity: 1;
+  background: #2dceb1;
+  color: #fbfbfb;
+  padding: 20px;
+}
+
+#emc-submit {
+  position: relative;
+  -webkit-transition: all 0.33s ease;
+  -moz-transition: all 0.33s ease;
+  transition: all 0.33s ease;
+  color: #fbfbfb;
+  background: #27b198;
+  border-color: #1f8f7b;
+}
+#emc-submit.ready-show {
+  background: #2dceb1;
+  color: #1f8f7b;
+  border: none;
+  border-bottom: 2px solid #26af96;
+  box-shadow: 0 1px 1px rgba(68, 68, 68, 0.2);
+  -webkit-transform: rotateX(360deg);
+  -moz-transform: rotateX(360deg);
+  -ms-transform: rotateX(360deg);
+  -o-transform: rotateX(360deg);
+  transform: rotateX(360deg);
+}
+#emc-submit.ready-show:hover {
+  color: #fbfbfb;
+  background: #27b198;
+  border-color: #1f8f7b;
+}
+#emc-submit.ready-show:active {
+  top: 2px;
+  border-bottom: none;
+}
+
+#emc-progress {
+  height: 100%;
+  border: 1px solid #1f8f7b;
+  background: #2dceb1;
+}
+
+#emc-progress_inner {
+  width: 100%;
+  height: 0;
+  background: #1f8f7b;
+  -webkit-transition: height 0.33s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  -moz-transition: height 0.33s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  transition: height 0.33s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+#emc-progress_ind {
+  position: absolute;
+  display: block;
+  width: 100%;
+  font-size: .7em;
+  font-weight: bold;
+  padding: 7px 5px 5px;
+  top: 0;
+  left: 0;
+  text-align: center;
+  color: #1f8f7b;
+}
+
+footer {
+  position: fixed;
+  width: 40px;
+  height: 100%;
+  background: rgba(251, 251, 251, 0.85);
+  bottom: 0;
+  left: 0;
+  padding: 25px 12px 10px;
+}
+
+.attrib {
+  padding: 10px 0;
+  text-align: center;
+}
+.attrib i {
+  margin-right: 7px;
+  margin-left: 7px;
+}
+</style>
+
+</head>
+
+<body tranlate="no">	
+  
+    <header>
+        <small>Way to find currect Job</small>
+    </header>
+
+    <div id="emc-score">
+
+    </div>
+
+    <div class="wrap">
+         <form action="{{ url_for('predict')}}"method="post"> 
+            <div class="row">
+                <section data-quiz-item>
+                    <div class="question">Are you good at communication skills?</div>
+                
+                    <div >
+                        <input type="radio" name="question-1" id="question-1-answers-A" value="1" />
+                        <label for="question-1-answers-A">A) Yes </label>
+                        <input type="radio" name="question-1" id="question-1-answers-B" value="0" />
+                        <label for="question-1-answers-B">B) No</label>
+                    </div>
+                
+                </section>
+                <section data-quiz-item>
+                <div class="question">Does you have Problem solving skills?</div>
+                    <div>
+                   
+                        <input type="radio" name="question-2" id="question-2-answers-A" value="1" />
+                        <label for="question-2-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-2" id="question-2-answers-B" value="0" />
+                        <label for="question-2-answers-B">B) No</label>
+                    </div>
+                </section>
+             </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Does you have Analytical skills?</div>
+                    <div>
+                        <input type="radio" name="question-3" id="question-3-answers-A" value="1" />
+                        <label for="question-3-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-3" id="question-3-answers-B" value="0" />
+                        <label for="question-3-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Have you ever work with Database</div>
+                    <div>
+                        <input type="radio" name="question-4" id="question-4-answers-A" value="1" />
+                        <label for="question-4-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-4" id="question-4-answers-B" value="0" />
+                        <label for="question-4-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Does you have Orgenization skills?</div>
+                    <div>
+                        <input type="radio" name="question-5" id="question-5-answers-A" value="1" />
+                        <label for="question-5-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-5" id="question-5-answers-B" value="0" />
+                        <label for="question-5-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Having any Technical Skills?</div>
+                    <div>
+                        <input type="radio" name="question-6" id="question-6-answers-A" value="1" />
+                        <label for="question-6-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-6" id="question-6-answers-B" value="0" />
+                        <label for="question-6-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Having Good Writing Skills?</div>
+                    <div>
+                        <input type="radio" name="question-7" id="question-7-answers-A" value="1" />
+                        <label for="question-7-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-7" id="question-7-answers-B" value="0" />
+                        <label for="question-7-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Are you Detail Oriented Person?</div>
+                    <div>
+                        <input type="radio" name="question-8" id="question-8-answers-A" value="1" />
+                        <label for="question-8-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-8" id="question-8-answers-B" value="0" />
+                        <label for="question-8-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Do you have Knowledge about processors?</div>
+                <div>
+                        <input type="radio" name="question-9" id="question-9-answers-A" value="1" />
+                        <label for="question-9-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-9" id="question-9-answers-B" value="0" />
+                        <label for="question-9-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Do you have Knowleadge about assembly language?</div>
+                <div>
+                        <input type="radio" name="question-10" id="question-10-answers-A" value="1" />
+                        <label for="question-10-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-10" id="question-10-answers-B" value="0" />
+                        <label for="question-10-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Do you follow Communication protocol?</div>
+                <div>
+                        <input type="radio" name="question-11" id="question-11-answers-A" value="1" />
+                        <label for="question-11-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-11" id="question-11-answers-B" value="0" />
+                        <label for="question-11-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Do you have Ability to debug multitasking code?</div>
+                <div>
+                        <input type="radio" name="question-12" id="question-12-answers-A" value="1" />
+                        <label for="question-12-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-12" id="question-12-answers-B" value="0" />
+                        <label for="question-12-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Are you Creative?</div>
+                <div>
+                        <input type="radio" name="question-13" id="question-13-answers-A" value="1" />
+                        <label for="question-13-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-13" id="question-13-answers-B" value="0" />
+                        <label for="question-13-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Have Time Management Skills?</div>
+                <div>
+                        <input type="radio" name="question-14" id="question-14-answers-A" value="1" />
+                        <label for="question-14-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-14" id="question-14-answers-B" value="0" />
+                        <label for="question-14-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">What about Programming Knowledge?</div>
+                <div>
+                        <input type="radio" name="question-15" id="question-15-answers-A" value="1" />
+                        <label for="question-15-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-15" id="question-15-answers-B" value="0" />
+                        <label for="question-15-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Do you have Designing Skills?</div>
+                <div>
+                        <input type="radio" name="question-16" id="question-16-answers-A" value="1" />
+                        <label for="question-16-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-16" id="question-16-answers-B" value="0" />
+                        <label for="question-16-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Do you Passionate about your work?</div>
+                <div>
+                        <input type="radio" name="question-17" id="question-17-answers-A" value="1" />
+                        <label for="question-17-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-17" id="question-17-answers-B" value="0" />
+                        <label for="question-17-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">What you think,You are a Hardworker?</div>
+                <div>
+                        <input type="radio" name="question-18" id="question-18-answers-A" value="1" />
+                        <label for="question-18-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-18" id="question-18-answers-B" value="0" />
+                        <label for="question-18-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Have you clear concepts of Security?</div>
+                <div>
+                        <input type="radio" name="question-19" id="question-19-answers-A" value="1" />
+                        <label for="question-19-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-19" id="question-19-answers-B" value="0" />
+                        <label for="question-19-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Intrested in Computer Networking?</div>
+                <div>
+                        <input type="radio" name="question-20" id="question-20-answers-A" value="1" />
+                        <label for="question-20-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-20" id="question-20-answers-B" value="0" />
+                        <label for="question-20-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Ever worked with Linux?</div>
+                <div>
+                        <input type="radio" name="question-21" id="question-21-answers-A" value="1" />
+                        <label for="question-21-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-21" id="question-21-answers-B" value="0" />
+                        <label for="question-21-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Knowledge about Virtualization?</div>
+                <div>
+                        <input type="radio" name="question-22" id="question-22-answers-A" value="1" />
+                        <label for="question-22-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-22" id="question-22-answers-B" value="0" />
+                        <label for="question-22-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Do you have knowledge about Wireless Technology?</div>
+                <div>
+                        <input type="radio" name="question-23" id="question-23-answers-A" value="1" />
+                        <label for="question-23-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-23" id="question-23-answers-B" value="0" />
+                        <label for="question-23-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Knowledge about Motherboard and Circuits?</div>
+                <div>
+                        <input type="radio" name="question-24" id="question-24-answers-A" value="1" />
+                        <label for="question-24-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-24" id="question-24-answers-B" value="0" />
+                        <label for="question-24-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Are you cretical Thinker?</div>
+                <div>
+                        <input type="radio" name="question-25" id="question-25-answers-A" value="1" />
+                        <label for="question-25-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-25" id="question-25-answers-B" value="0" />
+                        <label for="question-25-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Haveing problem with Decision Making?</div>
+                <div>
+                        <input type="radio" name="question-26" id="question-26-answers-A" value="1" />
+                        <label for="question-26-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-26" id="question-26-answers-B" value="0" />
+                        <label for="question-26-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Are you flexible in Life and Corprate World?</div>
+                <div>
+                        <input type="radio" name="question-27" id="question-27-answers-A" value="1" />
+                        <label for="question-27-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-27" id="question-27-answers-B" value="0" />
+                        <label for="question-27-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Haveing Good Presentation Skills?</div>
+                <div>
+                        <input type="radio" name="question-28" id="question-28-answers-A" value="1" />
+                        <label for="question-28-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-28" id="question-28-answers-B" value="0" />
+                        <label for="question-28-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Are you a Quick Learner?</div>
+                <div>
+                        <input type="radio" name="question-29" id="question-29-answers-A" value="1" />
+                        <label for="question-29-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-29" id="question-29-answers-B" value="0" />
+                        <label for="question-29-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Do you good at mathematicas?</div>
+                <div>
+                        <input type="radio" name="question-30" id="question-30-answers-A" value="1" />
+                        <label for="question-30-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-30" id="question-30-answers-B" value="0" />
+                        <label for="question-30-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Comfertable with Multitask Managment?</div>
+                <div>
+                        <input type="radio" name="question-31" id="question-31-answers-A" value="1" />
+                        <label for="question-31-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-31" id="question-31-answers-B" value="0" />
+                        <label for="question-31-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Do you have Strong Memory?</div>
+                <div>
+                        <input type="radio" name="question-32" id="question-32-answers-A" value="1" />
+                        <label for="question-32-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-32" id="question-32-answers-B" value="0" />
+                        <label for="question-32-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                <div class="question">Are you a Self Reliance Personality?</div>
+                <div>
+                        <input type="radio" name="question-33" id="question-33-answers-A" value="1" />
+                        <label for="question-33-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-33" id="question-33-answers-B" value="0" />
+                        <label for="question-33-answers-B">B) No</label>
+                    </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Do you have User advocacy personality?</div>
+                <div>
+                        <input type="radio" name="question-34" id="question-34-answers-A" value="1" />
+                        <label for="question-34-answers-A">A) Yes </label>
+                  
+                        <input type="radio" name="question-34" id="question-34-answers-B" value="0" />
+                        <label for="question-34-answers-B">B) No</label>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                    <div class="question">Knowledge about Rapid Prototyping?</div>
+                    <div>
+                        <input type="radio" name="question-35" id="question-35-answers-A" value="1" />
+                        <label for="question-35-answers-A">A) Yes </label>
+                  
+                        <input type="radio" name="question-35" id="question-35-answers-B" value="0" />
+                        <label for="question-35-answers-B">B) No</label>
+                    </div>
+                    </section>
+                <section data-quiz-item>
+                <div class="question">Having skills of Persuasion?</div>
+                <div>
+                        <input type="radio" name="question-36" id="question-36-answers-A" value="1" />
+                        <label for="question-36-answers-A">A) Yes </label>
+                  
+                        <input type="radio" name="question-36" id="question-36-answers-B" value="0" />
+                        <label for="question-36-answers-B">B) No</label>
+                    </div>
+                </section>
+            
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                    <div class="question">Good at Business Skills?</div>
+                    <div>
+                        <input type="radio" name="question-37" id="question-37-answers-A" value="1" />
+                        <label for="question-37-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-37" id="question-37-answers-B" value="0" />
+                        <label for="question-37-answers-B">B) No</label>
+                    </div>
+                    </section>
+                <section data-quiz-item>
+                <div class="question">Having Responsive design skill?</div>
+                <div>
+                        <input type="radio" name="question-38" id="question-38-answers-A" value="1" />
+                        <label for="question-38-answers-A">A) Yes </label>
+                  
+                        <input type="radio" name="question-38" id="question-38-answers-B" value="0" />
+                        <label for="question-38-answers-B">B) No</label>
+                    </div>
+                </section>
+                
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                    <div class="question">Are you Honest all the time?</div>
+                    <div>
+                        <input type="radio" name="question-39" id="question-39-answers-A" value="1" />
+                        <label for="question-39-answers-A">A) Yes </label>
+                  
+                        <input type="radio" name="question-39" id="question-39-answers-B" value="0" />
+                        <label for="question-39-answers-B">B) No</label>
+                    </div>
+                    </section>
+                <section data-quiz-item>
+                <div class="question">Are you Open Minded person?</div>
+                <div >
+                        <input type="radio" name="question-40" id="question-40-answers-A" value="1" />
+                        <label for="question-40-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-40" id="question-40-answers-B" value="0" />
+                        <label for="question-40-answers-B">B) No</label>
+                    </div>
+                </section>
+                
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                    <div class="question">Good at Listening Skills?</div>
+                    <div>
+                        <input type="radio" name="question-41" id="question-41-answers-A" value="1" />
+                        <label for="question-41-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-41" id="question-41-answers-B" value="0" />
+                        <label for="question-41-answers-B">B) No</label>
+                    </div>
+                    </section>
+                <section data-quiz-item>
+                <div class="question">Having ability to distinguish between requirements and wishes?</div>
+                <div>
+                        <input type="radio" name="question-42" id="question-42-answers-A" value="1" />
+                        <label for="question-42-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-42" id="question-42-answers-B" value="0" />
+                        <label for="question-42-answers-B">B) No</label>
+                    </div>
+                </section>
+            
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                    <div class="question">Do you have knowledge about all type of architecture?</div>
+                    <div>
+                        <input type="radio" name="question-43" id="question-43-answers-A" value="1" />
+                        <label for="question-43-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-43" id="question-43-answers-B" value="0" />
+                        <label for="question-43-answers-B">B) No</label>
+                    </div>
+                    </section>
+                <section data-quiz-item>
+                <div class="question">Having knowledge about all software based theory?</div>
+                <div>
+                        <input type="radio" name="question-44" id="question-44-answers-A" value="1" />
+                        <label for="question-44-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-44" id="question-44-answers-B" value="0" />
+                        <label for="question-44-answers-B">B) No</label>
+                    </div>
+                </section>
+                
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                    <div class="question">Do you belive in Teamwork?</div>
+                    <div>
+                        <input type="radio" name="question-45" id="question-45-answers-A" value="1" />
+                        <label for="question-45-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-45" id="question-45-answers-B" value="0" />
+                        <label for="question-45-answers-B">B) No</label>
+                    </div>
+                    </section>
+                <section data-quiz-item>
+                <div class="question">Good at Backup Management Skills?</div>
+                <div>
+                        <input type="radio" name="question-46" id="question-46-answers-A" value="1" />
+                        <label for="question-46-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-46" id="question-46-answers-B" value="0" />
+                        <label for="question-46-answers-B">B) No</label>
+                    </div>
+                </section>
+            
+            </div>
+            <div class="row">
+                <section data-quiz-item>
+                    <div class="question">Having problem with Multitasking?</div>
+                    <div>
+                        <input type="radio" name="question-47" id="question-47-answers-A" value="1" />
+                        <label for="question-47-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-47" id="question-47-answers-B" value="0" />
+                        <label for="question-47-answers-B">B) No</label>
+                    </div>
+                    </section>
+                <section data-quiz-item>
+                <div class="question">Good at Management Skills?</div>
+                <div>
+                        <input type="radio" name="question-48" id="question-48-answers-A" value="1" />
+                        <label for="question-48-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-48" id="question-48-answers-B" value="0" />
+                        <label for="question-48-answers-B">B) No</label>
+                    </div>
+                </section>
+            
+            </div>
+            
+            
+            <div class="row last">
+                <section data-quiz-item>
+                <div class="question">Do you have Leadership Skills?</div>
+                <div class="choices" data-choices='["Yes","No"]'>
+                    <div>
+                        <input type="radio" name="question-49" id="question-49-answers-A" value="1" />
+                        <label for="question-49-answers-A">A) Yes </label>
+                   
+                        <input type="radio" name="question-49" id="question-49-answers-B" value="0" />
+                        <label for="question-49-answers-B">B) No</label>
+                     </div>
+                </div>
+                </section>
+                <section data-quiz-item>
+                <div class="question">Do you Negotiate?</div>
+                <div class="choices" data-choices='["Yes","No"]'>
+                    <div>
+                        <input type="radio" name="question-50" id="question-50-answers-A" value="1" />
+                        <label for="question-50-answers-A">A) Yes </label>
+                    
+                        <input type="radio" name="question-50" id="question-50-answers-B" value="0" />
+                        <label for="question-50-answers-B">B) No</label>
+                    </div>
+                </div>
+                </section>
+            </div>
+                    
+                    <!-- <input type="submit" value="Submit" class="submitbtn" /> -->
+                    <div class="submit">
+                        <button id="emc-submit" >Submit Answers</button>
+                    </div>
+                    <!-- <button type="submit" class="submitbtn">Predict</button> -->
+                
+        </form>
+    </div>
+        <footer>
+            <div id="emc-progress"></div>
+        </footer>
+</body>
+</html>
